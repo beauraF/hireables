@@ -1,4 +1,6 @@
-ACTION_MAILER_DEFAULT_FROM: 'noreply@hireables.com'
+ACTION_MAILER_DEFAULT_FROM: <%= Rails.application.credentials.dig(:action_mailer, :default_from) %>
+
+GITHUB_ACCESS_TOKEN: <%= Rails.application.credentials.dig(:github, :access_token) %>
 
 development:
   APPLICATION_HOST: 'localhost'
