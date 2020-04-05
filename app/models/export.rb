@@ -9,7 +9,7 @@ class Export < ApplicationRecord
   }
 
   validates :email, presence: true
-  validates :email, format: { with: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/ }, if: -> { email? }
+  validates :email, format: { with: /\A[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+\z/ }, if: -> { email? }
   validate :location_or_language_presence
 
   before_create :set_uuid
