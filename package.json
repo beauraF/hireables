@@ -1,0 +1,46 @@
+{
+  "name": "hireables",
+  "private": true,
+  "scripts": {
+    "eslint:check": "eslint --max-warnings 0 '**/*.js'",
+    "eslint:write": "eslint --max-warnings 0 --fix '**/*.js'",
+    "prettier:check": "prettier --check '**/*.{js,json,yml,scss,md}'",
+    "prettier:write": "prettier --write '**/*.{js,json,yml,scss,md}'"
+  },
+  "dependencies": {
+    "@rails/ujs": "^6.0.0",
+    "@rails/webpacker": "4.2.2",
+    "stimulus": "^1.1.1",
+    "tailwindcss": "^1.2.0",
+    "turbolinks": "^5.2.0",
+    "webpack": "^4.42.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.1",
+    "prettier": "^2.0.2",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "engines": {
+    "node": "12.16.1",
+    "yarn": "1.x"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn eslint --max-warnings 0 --fix"
+    ],
+    "*.{js,json,yml,scss,md}": [
+      "yarn prettier --write"
+    ],
+    "*.{rb,erb,jbuilder}": [
+      "bundle exec rubocop --auto-correct --force-exclusion"
+    ]
+  }
+}

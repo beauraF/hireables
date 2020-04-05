@@ -1,0 +1,172 @@
+name: CI
+
+on: [push]
+
+jobs:
+  minitest:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ruby:2.6.6-buster
+      env:
+        POSTGRES_HOST: postgres
+
+    services:
+      postgres:
+        image: postgres:11.5-alpine
+        env:
+          POSTGRES_USER: root
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      SYSTEM_TEST_BROWSER: headless_chrome
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install required packages
+        run: |
+          apt-get update
+          apt-get install --yes libpq-dev
+          curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb --output /tmp/google-chrome.deb
+          apt install --yes /tmp/google-chrome.deb
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.1
+
+      - name: Set up gems cache
+        uses: actions/cache@preview
+        with:
+          path: /usr/local/bundle
+          key: ruby-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ruby-
+
+      - name: Set up node_modules cache
+        uses: actions/cache@preview
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-
+
+      - name: Install Ruby dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Install Node dependencies
+        run: |
+          npm install -g yarn
+          yarn install --frozen-lockfile
+
+      - name: Set up database
+        run: bundle exec rake db:setup
+
+      - name: Run tests
+        run: bundle exec rails test:system test
+
+  rubocop:
+    runs-on: ubuntu-latest
+
+    container: ruby:2.6.6-buster
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up gems cache
+        uses: actions/cache@preview
+        with:
+          path: /usr/local/bundle
+          key: ruby-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ruby-
+
+      - name: Install Ruby dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Run rubocop
+        run: bundle exec rubocop --parallel
+
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.1
+
+      - name: Set up node_modules cache
+        uses: actions/cache@preview
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-
+
+      - name: Install Node dependencies
+        run: |
+          npm install -g yarn
+          yarn install --frozen-lockfile
+
+      - name: Run eslint
+        run: yarn eslint:check
+
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.1
+
+      - name: Set up node_modules cache
+        uses: actions/cache@preview
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-
+
+      - name: Install Node dependencies
+        run: |
+          npm install -g yarn
+          yarn install --frozen-lockfile
+
+      - name: Run prettier
+        run: yarn prettier:check
+
+  brakeman:
+    runs-on: ubuntu-latest
+
+    container: ruby:2.6.6-buster
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up gems cache
+        uses: actions/cache@preview
+        with:
+          path: /usr/local/bundle
+          key: ruby-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ruby-
+
+      - name: Install Ruby dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Run brakeman
+        run: bundle exec brakeman

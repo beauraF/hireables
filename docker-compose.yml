@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: hireables_postgres
+    image: postgres:11.5-alpine
+    ports: ['5432:5432']
+    environment:
+      POSTGRES_USER: ${USER}
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', '${USER}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  maildev:
+    container_name: hireables_maildev
+    image: djfarrelly/maildev:latest
+    ports:
+      - '1080:80'
+      - '1025:25'
+    healthcheck:
+      test: ['CMD', 'curl', '--fail', 'http://localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
