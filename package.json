@@ -39,7 +39,7 @@
     "*.{js,json,yml,scss,md}": [
       "yarn prettier --write"
     ],
-    "*.{rb,erb,jbuilder}": [
+    "*": [
       "bundle exec rubocop --auto-correct --force-exclusion"
     ]
   }

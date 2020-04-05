@@ -8,6 +8,8 @@ ruby '2.6.6'
 gem 'rails', '6.0.2.2'
 
 gem 'bootsnap', require: false
+gem 'faraday'
+gem 'faraday-http-cache'
 gem 'figaro'
 gem 'octokit'
 gem 'pg'
@@ -17,8 +19,6 @@ gem 'rack-cors'
 gem 'rack-timeout'
 gem 'turbolinks'
 gem 'webpacker'
-gem 'faraday'
-gem 'faraday-http-cache'
 
 group :development, :test do
   gem 'brakeman', require: false
