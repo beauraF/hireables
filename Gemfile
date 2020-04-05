@@ -17,6 +17,8 @@ gem 'rack-cors'
 gem 'rack-timeout'
 gem 'turbolinks'
 gem 'webpacker'
+gem 'faraday'
+gem 'faraday-http-cache'
 
 group :development, :test do
   gem 'brakeman', require: false
