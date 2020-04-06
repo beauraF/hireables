@@ -14,8 +14,9 @@ class Export::RunJob < ApplicationJob
     ExportMailer.completed(@export).deliver_later
   end
 
-  rescue_from(StandardError) do |_exception|
+  rescue_from(StandardError) do |exception|
     @export.error!
+    Sentry.new(exception)
   end
 
   HEADERS = %w[name email github company hireable?].freeze
