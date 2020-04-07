@@ -8,6 +8,7 @@
     "prettier:write": "prettier --write '**/*.{js,json,yml,scss,md}'"
   },
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.0.1",
     "stimulus": "^1.1.1",
@@ -16,7 +17,6 @@
     "webpack": "^4.42.1"
   },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "husky": "^4.2.3",
