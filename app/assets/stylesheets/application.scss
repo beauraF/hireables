@@ -2,9 +2,14 @@
 
 /* third parties */
 
-/* core */
+/* purgecss start ignore */
 @import '~tailwindcss/base';
-@import 'base';
 @import '~tailwindcss/components';
+/* purgecss end ignore */
+
 @import '~tailwindcss/utilities';
+
+/* core */
+
+@import 'base';
 @import 'utilities';
