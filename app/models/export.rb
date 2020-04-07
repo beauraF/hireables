@@ -11,6 +11,7 @@ class Export < ApplicationRecord
   validates :email, presence: true
   validates :email, format: { with: /\A[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+\z/ }, if: -> { email? }
   validate :location_or_language_presence
+  validate :quota_not_exceeded, on: :create
 
   before_create :set_uuid
   after_create_commit :run
@@ -29,6 +30,12 @@ class Export < ApplicationRecord
     return if location? || language?
 
     errors.add(:base, "Location and language can't both be blank")
+  end
+
+  def quota_not_exceeded
+    return if GITHUB.rate_limit!.remaining >= 1000
+
+    errors.add(:base, 'Quota exceeded, please try again later')
   end
 
   def set_uuid
