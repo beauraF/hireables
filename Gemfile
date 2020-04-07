@@ -8,6 +8,7 @@ ruby '2.6.6'
 gem 'rails', '6.0.2.2'
 
 gem 'bootsnap', require: false
+gem 'capybara'
 gem 'faraday'
 gem 'faraday-http-cache'
 gem 'figaro'
@@ -17,7 +18,9 @@ gem 'puma'
 gem 'rack-attack'
 gem 'rack-cors'
 gem 'rack-timeout'
+gem 'selenium-webdriver'
 gem 'turbolinks'
+gem 'webdrivers'
 gem 'webpacker'
 
 group :development, :test do
@@ -35,12 +38,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'
-end
-
-group :test do
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
 end
 
 group :production do
