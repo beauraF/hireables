@@ -1,3 +1,8 @@
+const purgecss = require('@fullhuman/postcss-purgecss')({
+  content: ['./app/views/**/*.html.erb'],
+  defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+})
+
 module.exports = {
   plugins: [
     require('tailwindcss'),
@@ -9,5 +14,6 @@ module.exports = {
       },
       stage: 3,
     }),
+    ...(process.env.NODE_ENV === 'production' ? [purgecss] : []),
   ],
 }
