@@ -6,16 +6,13 @@ jobs:
   minitest:
     runs-on: ubuntu-latest
 
-    container:
-      image: ruby:2.6.6-buster
-      env:
-        POSTGRES_HOST: postgres
-
     services:
       postgres:
         image: postgres:11.5-alpine
         env:
-          POSTGRES_USER: root
+          POSTGRES_USER: runner
+        ports:
+          - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     env:
@@ -25,22 +22,18 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Install required packages
-        run: |
-          apt-get update
-          apt-get install --yes libpq-dev
-          curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb --output /tmp/google-chrome.deb
-          apt install --yes /tmp/google-chrome.deb
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
 
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.16.1
+          node-version: 10.x
 
       - name: Set up gems cache
         uses: actions/cache@preview
         with:
-          path: /usr/local/bundle
+          path: vendor/bundle
           key: ruby-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ruby-
@@ -55,13 +48,11 @@ jobs:
 
       - name: Install Ruby dependencies
         run: |
-          gem install bundler
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Install Node dependencies
-        run: |
-          npm install -g yarn
-          yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Set up database
         run: bundle exec rake db:setup
@@ -72,22 +63,23 @@ jobs:
   rubocop:
     runs-on: ubuntu-latest
 
-    container: ruby:2.6.6-buster
-
     steps:
       - uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
 
       - name: Set up gems cache
         uses: actions/cache@preview
         with:
-          path: /usr/local/bundle
+          path: vendor/bundle
           key: ruby-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ruby-
 
       - name: Install Ruby dependencies
         run: |
-          gem install bundler
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Run rubocop
@@ -102,7 +94,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.16.1
+          node-version: 10.x
 
       - name: Set up node_modules cache
         uses: actions/cache@preview
@@ -113,9 +105,7 @@ jobs:
             node-
 
       - name: Install Node dependencies
-        run: |
-          npm install -g yarn
-          yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Run eslint
         run: yarn eslint:check
@@ -129,7 +119,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.16.1
+          node-version: 10.x
 
       - name: Set up node_modules cache
         uses: actions/cache@preview
@@ -140,9 +130,7 @@ jobs:
             node-
 
       - name: Install Node dependencies
-        run: |
-          npm install -g yarn
-          yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Run prettier
         run: yarn prettier:check
@@ -150,22 +138,23 @@ jobs:
   brakeman:
     runs-on: ubuntu-latest
 
-    container: ruby:2.6.6-buster
-
     steps:
       - uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
 
       - name: Set up gems cache
         uses: actions/cache@preview
         with:
-          path: /usr/local/bundle
+          path: vendor/bundle
           key: ruby-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ruby-
 
       - name: Install Ruby dependencies
         run: |
-          gem install bundler
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Run brakeman

@@ -24,7 +24,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "engines": {
-    "node": "12.16.1",
+    "node": "10.x",
     "yarn": "1.x"
   },
   "husky": {
