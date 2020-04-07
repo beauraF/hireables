@@ -8,8 +8,7 @@ class Export < ApplicationRecord
     done: 'done',
   }
 
-  validates :email, presence: true
-  validates :email, format: { with: /\A[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+\z/ }, if: -> { email? }
+  validates :email, format: { with: /\A[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+\z/ }
   validate :location_or_language_presence
   validate :quota_not_exceeded, on: :create
 

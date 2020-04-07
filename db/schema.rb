@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_04_230340) do
+ActiveRecord::Schema.define(version: 2020_04_07_154334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "developers", force: :cascade do |t|
+    t.bigint "external_id", null: false
+    t.string "login", null: false
+    t.string "name"
+    t.text "bio"
+    t.string "company"
+    t.string "location"
+    t.string "email"
+    t.string "blog"
+    t.boolean "hireable", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["external_id"], name: "index_developers_on_external_id", unique: true
+    t.index ["login"], name: "index_developers_on_login", unique: true
+  end
 
   create_table "exports", force: :cascade do |t|
     t.string "status", default: "pending", null: false
