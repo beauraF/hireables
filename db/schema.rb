@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_154334) do
+ActiveRecord::Schema.define(version: 2020_04_08_224938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "developers", force: :cascade do |t|
     t.bigint "external_id", null: false
-    t.string "login", null: false
+    t.string "username", null: false
     t.string "name"
     t.text "bio"
     t.string "company"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_154334) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["external_id"], name: "index_developers_on_external_id", unique: true
-    t.index ["login"], name: "index_developers_on_login", unique: true
+    t.index ["username"], name: "index_developers_on_username", unique: true
   end
 
   create_table "exports", force: :cascade do |t|
