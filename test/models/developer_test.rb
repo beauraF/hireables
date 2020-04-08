@@ -3,10 +3,6 @@
 require 'test_helper'
 
 class DeveloperTest < ActiveSupport::TestCase
-  test 'external_id presence' do
-    assert build(:developer, external_id: nil).invalid?
-  end
-
   test 'external_id uniqueness' do
     create(:developer, external_id: 1)
     assert build(:developer, external_id: 1).invalid?
