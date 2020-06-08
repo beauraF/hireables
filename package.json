@@ -20,7 +20,7 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.7",
+    "lint-staged": "^10.2.9",
     "prettier": "^2.0.5",
     "webpack-dev-server": "^3.11.0"
   },
