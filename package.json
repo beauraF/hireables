@@ -17,7 +17,7 @@
     "webpack": "^4.44.1"
   },
   "devDependencies": {
-    "eslint": "^7.8.1",
+    "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.3.0",
